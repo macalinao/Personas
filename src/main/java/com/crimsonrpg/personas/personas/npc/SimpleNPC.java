@@ -36,6 +36,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import org.martin.bukkit.npclib.NPCEntity;
+import org.martin.bukkit.npclib.NPCManager;
 
 /**
  * Represents a simple NPC.
@@ -49,11 +50,11 @@ public class SimpleNPC implements NPC {
     private NPCEntity handle;
     private HumanEntity bukkitHandle;
 
-    public SimpleNPC(String id, String name, List<Trait> traits, Persona persona, NPCEntity handle) {
+    public SimpleNPC(String id, String name, List<Trait> traits, Persona persona) {
         this.id = id;
         this.name = name;
         this.persona = persona;
-        this.handle = handle;
+        this.handle = null;
         
         //Add in the traits
         for (Trait trait : traits) {
@@ -61,7 +62,7 @@ public class SimpleNPC implements NPC {
         }
         
         //Add the bukkit handle
-        bukkitHandle = (HumanEntity) handle.getBukkitEntity();
+        bukkitHandle = null;
     }
     
     public String getId() {
@@ -104,14 +105,35 @@ public class SimpleNPC implements NPC {
     public Persona getPersona() {
         return persona;
     }
+    
+    public void spawn(Location location) {
+        Personas.getNPCManager().spawnNPC(this, location);
+    }
 
     public void despawn() {
+        Personas.getNPCManager().despawnNPC(this);
+    }
+    
+    public void delete() {
         //Bye bye
-        Personas.getNPCManager().despawnNPC(id);
+        Personas.getNPCManager().deleteNPC(id);
+    }
+    
+    public HumanEntity getBukkitHandle() {
+        return bukkitHandle;
     }
     
     /////////////////////////////////////
-    // BUKKIT STUFF IS BELOW HERE
+    // PROTECTED STUFF
+    /////////////////////////////////////
+    
+    protected void setHandle(NPCEntity handle) {
+        this.handle = handle;
+        this.bukkitHandle = (HumanEntity) handle.getBukkitEntity();
+    }
+    
+    /////////////////////////////////////
+    // BUKKIT DELEGATE STUFF IS BELOW HERE
     // DO NOT MESS WITH IT UNLESS BUKKIT CHANGES
     /////////////////////////////////////
     

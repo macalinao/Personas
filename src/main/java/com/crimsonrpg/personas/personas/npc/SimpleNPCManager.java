@@ -76,11 +76,7 @@ public class SimpleNPCManager implements NPCManager {
             return npcs.get(id);
         }
         
-        String trimmedName = name.substring(0, 16);
-        
-//        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, id);
-        NPCEntity handleNPC = handle.spawnNPC(trimmedName, null, id);
-        NPC theNpc = new SimpleNPC(id, name, traits, persona, handleNPC);
+        NPC theNpc = new SimpleNPC(id, name, traits, persona);
 
 //        String title = theNpc.getName() + "\n"
 //                + ChatColor.AQUA + "<" + theNpc.getType().name() + ">";
@@ -104,6 +100,25 @@ public class SimpleNPCManager implements NPCManager {
 
     public void deleteNPC(NPC npc) {
         this.deleteNPC(npc.getId());
+    }
+
+    public void spawnNPC(String id, Location location) {
+        NPC npc = this.getNPC(id);
+        spawnNPC(npc, location);
+    }
+
+    public void spawnNPC(NPC npc, Location location) {
+        String trimmedName = npc.getName().substring(0, 16);
+        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, npc.getId());
+        ((SimpleNPC) npc).setHandle(handleNPC);
+    }
+
+    public void despawnNPC(String id) {
+        handle.despawnById(id);
+    }
+
+    public void despawnNPC(NPC npc) {
+        handle.despawnById(npc.getId());
     }
 
     public NPC getNPC(String id) {
