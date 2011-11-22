@@ -97,20 +97,19 @@ public class SimpleNPC implements NPC {
     }
     
     public Persona getPersona() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return persona;
     }
 
     public void despawn() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        //Bye bye
+        Personas.getNPCManager().despawnNPC(id);
     }
     
     /////////////////////////////////////
     // BUKKIT STUFF IS BELOW HERE
+    // DO NOT MESS WITH IT UNLESS BUKKIT CHANGES
     /////////////////////////////////////
     
-    /**
-     * {@inheritDoc}
-     */
     public void setOp(boolean bln) {
         bukkitHandle.setOp(bln);
     }

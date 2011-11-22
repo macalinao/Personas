@@ -77,12 +77,17 @@ public class SimpleNPCManager implements NPCManager {
     }
 
     public boolean despawnNPC(String id) {
+        //Check if the NPC exists
+        if (!npcs.containsKey(id)) return false;
+        
+        //Despawn
+        handle.despawnById(id);
         npcs.remove(id);
         return true;
     }
 
     public void despawnNPC(NPC npc) {
-        npcs.remove(npc.getId());
+        this.despawnNPC(npc.getId());
     }
 
     public NPC getNPC(String id) {
