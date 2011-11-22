@@ -56,7 +56,7 @@ public class SimpleNPCManager implements NPCManager {
         registeredTraits.put(name, type);
     }
 
-    public NPC spawnNPC(String name, Location location, List<Trait> traits, Persona persona) {
+    public NPC createNPC(String name, Location location, List<Trait> traits, Persona persona) {
         //Create an ID
         StringBuilder idBuilder = new StringBuilder();
         idBuilder.append(name).append('-').append(persona.getName());
@@ -70,7 +70,7 @@ public class SimpleNPCManager implements NPCManager {
         return spawnNPC(idBuilder.toString(), name, location, traits, persona);
     }
 
-    public NPC spawnNPC(String id, String name, Location location, List<Trait> traits, Persona persona) {
+    public NPC createNPC(String id, String name, Location location, List<Trait> traits, Persona persona) {
         if (npcs.containsKey(id)) {
             PersonasPlugin.LOGGER.warning("[Personas] An NPC with the id '" + id + "' already exists; returning the existing NPC.");
             return npcs.get(id);
