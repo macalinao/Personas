@@ -9,6 +9,7 @@ import com.crimsonrpg.personas.personasapi.Personas;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.Trait;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -94,6 +95,10 @@ public class SimpleNPC implements NPC {
     
     public void setTrait(Trait trait) {
         traits.put(trait.getClass(), trait);
+    }
+
+    public List<Trait> getTraits() {
+        return new ArrayList(traits.values());
     }
     
     public Persona getPersona() {

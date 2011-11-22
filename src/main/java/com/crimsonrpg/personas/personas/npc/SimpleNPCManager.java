@@ -8,6 +8,7 @@ import com.crimsonrpg.personas.personas.PersonasPlugin;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import com.crimsonrpg.personas.personasapi.npc.Trait;
+import com.crimsonrpg.personas.personasapi.npc.TraitName;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,14 +34,23 @@ public class SimpleNPCManager implements NPCManager {
         //TODO: this
     }
     
-    public <T extends Trait> void registerTrait(String string, Class<T> type) {
-        //Check if the trait is already registered
-        if (registeredTraits.containsKey(string) || registeredTraits.containsValue(type)) {
-            PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' was attempted to be registered under '" + string + "' but already exists; cancelling registration...");
+    public void registerTrait(Class<? extends Trait> type) {
+        //Check if the name of the trait has been set
+        if (!type.isAnnotationPresent(TraitName.class)) {
+            PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' does not have a name registered.");
             return;
         }
         
-        registeredTraits.put(string, type);
+        //Get the name of the trait via annotations
+        String name = type.getAnnotation(TraitName.class).value();
+        
+        //Check if the trait is already registered
+        if (registeredTraits.containsKey(name) || registeredTraits.containsValue(type)) {
+            PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' was attempted to be registered under '" + name + "' but already exists; cancelling registration...");
+            return;
+        }
+        
+        registeredTraits.put(name, type);
     }
 
     public NPC spawnNPC(String name, Location location, List<Trait> traits, Persona persona) {
@@ -63,7 +73,9 @@ public class SimpleNPCManager implements NPCManager {
             return npcs.get(id);
         }
         
-        NPCEntity handleNPC = handle.spawnNPC(name, location, id);
+        String trimmedName = name.substring(0, 16);
+        
+        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, id);
         NPC theNpc = new SimpleNPC(id, name, traits, persona, handleNPC);
 
 //        String title = theNpc.getName() + "\n"
