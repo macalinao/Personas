@@ -67,7 +67,7 @@ public class SimpleNPCManager implements NPCManager {
         }
         
         //Spawn it
-        return spawnNPC(idBuilder.toString(), name, location, traits, persona);
+        return createNPC(idBuilder.toString(), name, location, traits, persona);
     }
 
     public NPC createNPC(String id, String name, Location location, List<Trait> traits, Persona persona) {
