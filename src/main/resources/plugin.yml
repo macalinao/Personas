@@ -1,0 +1,12 @@
+main: com.crimsonrpg.personas.personas.Personas
+
+name: Personas
+description: The Personas plugin for Bukkit.
+
+version: 1.0
+author: AlbireoX
+
+commands:
+  personas:
+    description: Personas base command
+    usage: /personas
