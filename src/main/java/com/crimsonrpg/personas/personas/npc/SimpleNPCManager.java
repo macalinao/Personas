@@ -56,7 +56,7 @@ public class SimpleNPCManager implements NPCManager {
         registeredTraits.put(name, type);
     }
 
-    public NPC createNPC(String name, Location location, List<Trait> traits, Persona persona) {
+    public NPC createNPC(String name, List<Trait> traits, Persona persona) {
         //Create an ID
         StringBuilder idBuilder = new StringBuilder();
         idBuilder.append(name).append('-').append(persona.getName());
@@ -67,10 +67,10 @@ public class SimpleNPCManager implements NPCManager {
         }
         
         //Spawn it
-        return createNPC(idBuilder.toString(), name, location, traits, persona);
+        return createNPC(idBuilder.toString(), name, traits, persona);
     }
 
-    public NPC createNPC(String id, String name, Location location, List<Trait> traits, Persona persona) {
+    public NPC createNPC(String id, String name, List<Trait> traits, Persona persona) {
         if (npcs.containsKey(id)) {
             PersonasPlugin.LOGGER.warning("[Personas] An NPC with the id '" + id + "' already exists; returning the existing NPC.");
             return npcs.get(id);
@@ -78,7 +78,8 @@ public class SimpleNPCManager implements NPCManager {
         
         String trimmedName = name.substring(0, 16);
         
-        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, id);
+//        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, id);
+        NPCEntity handleNPC = handle.spawnNPC(trimmedName, null, id);
         NPC theNpc = new SimpleNPC(id, name, traits, persona, handleNPC);
 
 //        String title = theNpc.getName() + "\n"
@@ -91,7 +92,7 @@ public class SimpleNPCManager implements NPCManager {
         return theNpc;
     }
 
-    public boolean despawnNPC(String id) {
+    public boolean deleteNPC(String id) {
         //Check if the NPC exists
         if (!npcs.containsKey(id)) return false;
         
@@ -101,8 +102,8 @@ public class SimpleNPCManager implements NPCManager {
         return true;
     }
 
-    public void despawnNPC(NPC npc) {
-        this.despawnNPC(npc.getId());
+    public void deleteNPC(NPC npc) {
+        this.deleteNPC(npc.getId());
     }
 
     public NPC getNPC(String id) {
@@ -112,5 +113,4 @@ public class SimpleNPCManager implements NPCManager {
     public List<NPC> getNPCs() {
         return new ArrayList(npcs.values());
     }
-    
 }
