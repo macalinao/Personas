@@ -420,4 +420,8 @@ public class SimpleNPC implements NPC {
     public GameMode getGameMode() {
         return bukkitHandle.getGameMode();
     }
+
+    public int getMaxHealth() {
+        return bukkitHandle.getMaxHealth();
+    }
 }
