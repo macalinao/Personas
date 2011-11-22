@@ -31,7 +31,10 @@ public class SimpleNPCManager implements NPCManager {
     
     public void load(PersonasPlugin plugin) {
         handle = new org.martin.bukkit.npclib.NPCManager(plugin);
-        //TODO: this
+    }
+
+    public Class<? extends Trait> getTraitType(String name) {
+        return registeredTraits.get(name);
     }
     
     public void registerTrait(Class<? extends Trait> type) {
