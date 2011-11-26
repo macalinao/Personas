@@ -4,11 +4,6 @@
  */
 package com.crimsonrpg.personas.personas;
 
-import com.crimsonrpg.personas.personas.PersonasPlugin;
-import com.crimsonrpg.personas.personasapi.Personas;
-import com.crimsonrpg.personas.personasapi.npc.NPC;
-import com.crimsonrpg.personas.personasapi.npc.Trait;
-import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -36,18 +32,27 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import org.martin.bukkit.npclib.NPCEntity;
-import org.martin.bukkit.npclib.NPCManager;
+
+import com.crimsonrpg.personas.personasapi.Personas;
+import com.crimsonrpg.personas.personasapi.npc.NPC;
+import com.crimsonrpg.personas.personasapi.npc.Trait;
+import com.crimsonrpg.personas.personasapi.persona.Persona;
 
 /**
  * Represents a simple NPC.
  */
-public class SimpleNPC implements NPC {
+public final class SimpleNPC implements NPC {
+
     private String id;
+
     private String name;
+
     private Map<Class, Trait> traits = new HashMap<Class, Trait>();
+
     private Persona persona;
-    
+
     private NPCEntity handle;
+
     private HumanEntity bukkitHandle;
 
     public SimpleNPC(String id, String name, List<Trait> traits, Persona persona) {
@@ -55,14 +60,25 @@ public class SimpleNPC implements NPC {
         this.name = name;
         this.persona = persona;
         this.handle = null;
-        
+
         //Add in the traits
         for (Trait trait : traits) {
             this.traits.put(trait.getClass(), trait);
         }
-        
+
         //Add the bukkit handle
         bukkitHandle = null;
+        
+        updateCoreTrait();
+    }
+    
+    void updateCoreTrait() {
+        //Add the core trait
+        TraitCore trait = this.getTrait(TraitCore.class);
+        trait.setHealth(this.getHealth());
+        trait.setInventory(this.getInventory());
+        trait.setLocation(this.getLocation());
+        trait.setName(this.getName());
     }
     
     public String getId() {
@@ -78,7 +94,7 @@ public class SimpleNPC implements NPC {
         if (trait != null) {
             return type.cast(trait);
         }
-        
+
         //Creates a default trait if it is not found
         try {
             T theTrait = type.newInstance();
@@ -90,10 +106,10 @@ public class SimpleNPC implements NPC {
         } catch (IllegalAccessException ex) {
             PersonasPlugin.LOGGER.severe("[Personas] Could not access a new Trait for '" + type.getName() + "' in the NPC " + id + ".");
         }
-        
+
         return null;
     }
-    
+
     public void setTrait(Trait trait) {
         traits.put(trait.getClass(), trait);
     }
@@ -101,11 +117,11 @@ public class SimpleNPC implements NPC {
     public List<Trait> getTraits() {
         return new ArrayList(traits.values());
     }
-    
+
     public Persona getPersona() {
         return persona;
     }
-    
+
     public void spawn(Location location) {
         Personas.getNPCManager().spawnNPC(this, location);
     }
@@ -113,30 +129,28 @@ public class SimpleNPC implements NPC {
     public void despawn() {
         Personas.getNPCManager().despawnNPC(this);
     }
-    
+
     public void delete() {
         //Bye bye
         Personas.getNPCManager().deleteNPC(id);
     }
-    
+
     public HumanEntity getBukkitHandle() {
         return bukkitHandle;
     }
-    
+
     /////////////////////////////////////
     // PROTECTED STUFF
     /////////////////////////////////////
-    
     protected void setHandle(NPCEntity handle) {
         this.handle = handle;
         this.bukkitHandle = (HumanEntity) handle.getBukkitEntity();
     }
-    
+
     /////////////////////////////////////
     // BUKKIT DELEGATE STUFF IS BELOW HERE
     // DO NOT MESS WITH IT UNLESS BUKKIT CHANGES
     /////////////////////////////////////
-    
     public void setOp(boolean bln) {
         bukkitHandle.setOp(bln);
     }
@@ -424,4 +438,5 @@ public class SimpleNPC implements NPC {
     public int getMaxHealth() {
         return bukkitHandle.getMaxHealth();
     }
+
 }

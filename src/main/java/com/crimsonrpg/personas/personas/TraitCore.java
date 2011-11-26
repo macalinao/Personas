@@ -53,5 +53,37 @@ public class TraitCore implements Trait {
         health = 0;
         inventory = null;
     }
+
+    public int getHealth() {
+        return health;
+    }
+
+    protected void setHealth(int health) {
+        this.health = health;
+    }
+
+    public PlayerInventory getInventory() {
+        return inventory;
+    }
+
+    protected void setInventory(PlayerInventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    protected void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    protected void setName(String name) {
+        this.name = name;
+    }
     
 }

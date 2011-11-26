@@ -106,6 +106,8 @@ public class PersonasPlugin extends JavaPlugin {
         
         //Save all NPCs
         for (NPC npc : manager.getNPCs()) {
+            ((SimpleNPC) npc).updateCoreTrait();
+            
             String npcId = npc.getId();
             for (Trait trait : npc.getTraits()) {
                 
