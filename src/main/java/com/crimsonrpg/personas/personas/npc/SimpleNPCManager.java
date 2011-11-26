@@ -4,18 +4,20 @@
  */
 package com.crimsonrpg.personas.personas.npc;
 
-import com.crimsonrpg.personas.personas.PersonasPlugin;
-import com.crimsonrpg.personas.personasapi.npc.NPC;
-import com.crimsonrpg.personas.personasapi.npc.NPCManager;
-import com.crimsonrpg.personas.personasapi.npc.Trait;
-import com.crimsonrpg.personas.personasapi.npc.TraitName;
-import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.Location;
 import org.martin.bukkit.npclib.NPCEntity;
+
+import com.crimsonrpg.personas.personas.PersonasPlugin;
+import com.crimsonrpg.personas.personasapi.npc.NPC;
+import com.crimsonrpg.personas.personasapi.npc.NPCManager;
+import com.crimsonrpg.personas.personasapi.npc.Trait;
+import com.crimsonrpg.personas.personasapi.npc.TraitId;
+import com.crimsonrpg.personas.personasapi.persona.Persona;
 
 /**
  * The default NPC manager implementation.
@@ -39,13 +41,13 @@ public class SimpleNPCManager implements NPCManager {
     
     public void registerTrait(Class<? extends Trait> type) {
         //Check if the name of the trait has been set
-        if (!type.isAnnotationPresent(TraitName.class)) {
+        if (!type.isAnnotationPresent(TraitId.class)) {
             PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' does not have a name registered.");
             return;
         }
         
         //Get the name of the trait via annotations
-        String name = type.getAnnotation(TraitName.class).value();
+        String name = type.getAnnotation(TraitId.class).value();
         
         //Check if the trait is already registered
         if (registeredTraits.containsKey(name) || registeredTraits.containsValue(type)) {
