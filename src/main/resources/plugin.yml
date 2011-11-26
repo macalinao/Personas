@@ -1,4 +1,4 @@
-main: com.crimsonrpg.personas.personas.Personas
+main: com.crimsonrpg.personas.personas.PersonasPlugin
 
 name: Personas
 description: The Personas plugin for Bukkit.
