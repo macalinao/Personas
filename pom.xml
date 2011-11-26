@@ -69,7 +69,7 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.crimsonrpg.personas:api</include>
+                                    <include>com.crimsonrpg.personas:personasapi</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
