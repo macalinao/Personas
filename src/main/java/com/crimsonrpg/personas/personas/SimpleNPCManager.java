@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.crimsonrpg.personas.personas.npc;
+package com.crimsonrpg.personas.personas;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.martin.bukkit.npclib.NPCEntity;
 
-import com.crimsonrpg.personas.personas.PersonasPlugin;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import com.crimsonrpg.personas.personasapi.npc.Trait;
@@ -31,7 +30,7 @@ public class SimpleNPCManager implements NPCManager {
         
     }
     
-    public void load(PersonasPlugin plugin) {
+    protected void load(PersonasPlugin plugin) {
         handle = new org.martin.bukkit.npclib.NPCManager(plugin);
     }
 

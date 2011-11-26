@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.crimsonrpg.personas.personas.npc;
+package com.crimsonrpg.personas.personas;
 
 import com.crimsonrpg.personas.personas.PersonasPlugin;
 import com.crimsonrpg.personas.personasapi.Personas;
