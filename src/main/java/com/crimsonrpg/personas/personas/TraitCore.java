@@ -11,6 +11,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.crimsonrpg.personas.personasapi.npc.Trait;
 import com.crimsonrpg.personas.personasapi.npc.TraitId;
+import com.crimsonrpg.personas.personasapi.persona.Persona;
 import org.bukkit.Bukkit;
 
 /**
@@ -22,6 +23,7 @@ public class TraitCore implements Trait {
     private Location location;
     private int health;
     private PlayerInventory inventory;
+    private Persona persona;
     
     public void load(ConfigurationSection cs) {
         name = cs.getString("name");
@@ -34,6 +36,7 @@ public class TraitCore implements Trait {
                 (float) cs.getDouble("loc.yaw"));
         health = cs.getInt("health");
         //TODO: inventory = inventory.
+        //persona = Personas.get
     }
 
     public void save(ConfigurationSection cs) {
@@ -84,6 +87,14 @@ public class TraitCore implements Trait {
 
     protected void setName(String name) {
         this.name = name;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    protected void setPersona(Persona persona) {
+        this.persona = persona;
     }
     
 }
