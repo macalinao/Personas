@@ -35,7 +35,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     }
 
     public NPC create(String id) {
-        return new HumanNPC(id);
+        return new SimpleHumanNPC(id);
     }
 
     public NPC createNPC(String name, List<Flag> flags, Persona persona) {
@@ -90,7 +90,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
     public void spawnNPC(NPC npc, Location location) {
         NPCEntity handel = handle.spawnNPC(npc.getFlag(FlagNPCName.class).getCompatibleName(), location, npc.getId());
-        ((HumanNPC) npc).setHandle(handel); //As in the composer
+        ((SimpleHumanNPC) npc).setHandle(handel); //As in the composer
         bukkitMappings.put((LivingEntity) handel.getBukkitEntity(), npc);
     }
 

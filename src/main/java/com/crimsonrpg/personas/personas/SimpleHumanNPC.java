@@ -4,25 +4,24 @@
  */
 package com.crimsonrpg.personas.personas;
 
-import com.crimsonrpg.flaggables.api.GenericFlaggable;
-
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.martin.bukkit.npclib.NPCEntity;
 
+import com.crimsonrpg.flaggables.api.GenericFlaggable;
 import com.crimsonrpg.personas.personasapi.Personas;
-import com.crimsonrpg.personas.personasapi.npc.NPC;
+import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
 
 /**
  * Represents a simple NPC.
  */
-public final class HumanNPC extends GenericFlaggable implements NPC<HumanEntity> {
+public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
 
     private NPCEntity handle;
 
     private HumanEntity bukkitHandle;
 
-    HumanNPC(String id) {
+    SimpleHumanNPC(String id) {
         super(id);
     }
 
