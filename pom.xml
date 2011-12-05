@@ -16,11 +16,20 @@
     </properties>
 
     <repositories>
+        
         <repository>
             <id>bukkit</id>
             <name>bukkit</name>
             <url>http://repo.bukkit.org/content/groups/repo/</url>
         </repository>
+        
+        <repository>
+            <id>mmoMinecraft-repo</id>
+            <name>mmoMinecraft API</name>
+            <url>http://repo.mmo.me.uk</url>
+            <layout>default</layout>
+        </repository>
+        
     </repositories>
     
     <dependencies>
@@ -28,17 +37,18 @@
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
             <version>1.0.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
+        
         <dependency>
             <groupId>com.crimsonrpg</groupId>
-            <artifactId>flaggables</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.crimsonrpg.personas</groupId>
             <artifactId>personasapi</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
+        
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -49,6 +59,8 @@
 
     <build>
         <plugins>
+            
+            <!-- Shade plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -69,6 +81,7 @@
                     </execution>
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
   
