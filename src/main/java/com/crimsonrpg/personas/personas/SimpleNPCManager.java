@@ -4,114 +4,94 @@
  */
 package com.crimsonrpg.personas.personas;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.Location;
-import org.martin.bukkit.npclib.NPCEntity;
+import org.bukkit.entity.LivingEntity;
 
+import com.crimsonrpg.flaggables.api.Flag;
+import com.crimsonrpg.flaggables.api.GenericFlaggableManager;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
-import com.crimsonrpg.personas.personasapi.npc.Trait;
-import com.crimsonrpg.personas.personasapi.npc.TraitId;
+import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCName;
+import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
+import java.util.HashMap;
+import java.util.Map;
+import org.martin.bukkit.npclib.NPCEntity;
 
 /**
  * The default NPC manager implementation.
  */
-public class SimpleNPCManager implements NPCManager {
-    private Map<String, NPC> npcs = new HashMap<String, NPC>();
-    private Map<String, Class<? extends Trait>> registeredTraits = new HashMap<String, Class<? extends Trait>>();
+public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NPCManager {
+    private Map<LivingEntity, NPC> bukkitMappings = new HashMap<LivingEntity, NPC>();
     private org.martin.bukkit.npclib.NPCManager handle;
-    
-    public SimpleNPCManager() {
-        
+
+    SimpleNPCManager() {
     }
-    
+
     protected void load(PersonasPlugin plugin) {
         handle = new org.martin.bukkit.npclib.NPCManager(plugin);
     }
 
-    public Class<? extends Trait> getTraitType(String name) {
-        return registeredTraits.get(name);
-    }
-    
-    public void registerTrait(Class<? extends Trait> type) {
-        //Check if the name of the trait has been set
-        if (!type.isAnnotationPresent(TraitId.class)) {
-            PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' does not have a name registered.");
-            return;
-        }
-        
-        //Get the name of the trait via annotations
-        String name = type.getAnnotation(TraitId.class).value();
-        
-        //Check if the trait is already registered
-        if (registeredTraits.containsKey(name) || registeredTraits.containsValue(type)) {
-            PersonasPlugin.LOGGER.warning("[Personas] The trait '" + type.getName() + "' was attempted to be registered under '" + name + "' but already exists; cancelling registration...");
-            return;
-        }
-        
-        registeredTraits.put(name, type);
+    public NPC create(String id) {
+        return new HumanNPC(id);
     }
 
-    public NPC createNPC(String name, List<Trait> traits, Persona persona) {
+    public NPC createNPC(String name, List<Flag> flags, Persona persona) {
         //Create an ID
         StringBuilder idBuilder = new StringBuilder();
         idBuilder.append(name).append('-').append(persona.getName());
-        
+
         //Append a different number to the string if the id is taken
-        for (int i = 0; npcs.containsKey(idBuilder.toString()); i++) {
+        for (int i = 0; idExists(idBuilder.toString()); i++) {
             idBuilder = (new StringBuilder()).append(idBuilder.toString()).append(i);
         }
-        
+
         //Spawn it
-        return createNPC(idBuilder.toString(), name, traits, persona);
+        return createNPC(idBuilder.toString(), name, flags, persona);
     }
 
-    public NPC createNPC(String id, String name, List<Trait> traits, Persona persona) {
-        if (npcs.containsKey(id)) {
+    public NPC createNPC(String id, String name, List<Flag> flags, Persona persona) {
+        if (idExists(id)) {
             PersonasPlugin.LOGGER.warning("[Personas] An NPC with the id '" + id + "' already exists; returning the existing NPC.");
-            return npcs.get(id);
+            return get(id);
         }
-        
-        NPC theNpc = new SimpleNPC(id, name, traits, persona);
+
+        NPC theNpc = create(id);
+        theNpc.addFlags(flags);
+        theNpc.getFlag(FlagNPCName.class).setName(name);
+        theNpc.getFlag(FlagNPCPersona.class).setPersona(persona);
 
 //        String title = theNpc.getName() + "\n"
 //                + ChatColor.AQUA + "<" + theNpc.getType().name() + ">";
-        
+
         //TODO: spout support?
         //SpoutManager.getAppearanceManager().setGlobalTitle((LivingEntity) theNpc.getHandle().getBukkitEntity(), title);
 
-        npcs.put(id, theNpc);
+
         return theNpc;
     }
 
-    public boolean deleteNPC(String id) {
-        //Check if the NPC exists
-        if (!npcs.containsKey(id)) return false;
-        
-        //Despawn
+    @Override
+    public NPC destroy(String id) {
         handle.despawnById(id);
-        npcs.remove(id);
-        return true;
+        return super.destroy(id);
     }
 
-    public void deleteNPC(NPC npc) {
-        this.deleteNPC(npc.getId());
+    @Override
+    public NPC destroy(NPC npc) {
+        return destroy(npc.getId());
     }
 
     public void spawnNPC(String id, Location location) {
-        NPC npc = this.getNPC(id);
-        spawnNPC(npc, location);
+        spawnNPC(get(id), location);
     }
 
     public void spawnNPC(NPC npc, Location location) {
-        String trimmedName = npc.getName().substring(0, 16);
-        NPCEntity handleNPC = handle.spawnNPC(trimmedName, location, npc.getId());
-        ((SimpleNPC) npc).setHandle(handleNPC);
+        NPCEntity handel = handle.spawnNPC(npc.getFlag(FlagNPCName.class).getCompatibleName(), location, npc.getId());
+        ((HumanNPC) npc).setHandle(handel); //As in the composer
+        bukkitMappings.put((LivingEntity) handel.getBukkitEntity(), npc);
     }
 
     public void despawnNPC(String id) {
@@ -122,11 +102,8 @@ public class SimpleNPCManager implements NPCManager {
         handle.despawnById(npc.getId());
     }
 
-    public NPC getNPC(String id) {
-        return npcs.get(id);
+    public NPC fromBukkitEntity(LivingEntity le) {
+        return bukkitMappings.get(le);
     }
 
-    public List<NPC> getNPCs() {
-        return new ArrayList(npcs.values());
-    }
 }
