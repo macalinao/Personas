@@ -9,6 +9,8 @@ import com.crimsonrpg.flaggables.api.FlaggableLoader;
 import com.crimsonrpg.flaggables.api.Flaggables;
 import com.crimsonrpg.personas.personas.flag.FlagNPCName;
 import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
+import com.crimsonrpg.personas.personas.listener.PEntityListener;
+import com.crimsonrpg.personas.personas.listener.PPlayerListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -21,6 +23,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.crimsonrpg.personas.personasapi.Personas;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
+import org.bukkit.Bukkit;
+import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.plugin.PluginManager;
 
 /**
  * The main Persons plugin.
@@ -48,6 +54,11 @@ public class PersonasPlugin extends JavaPlugin {
                 FlagNPCName.class,
                 FlagNPCPersona.class);
 
+        //Register events
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvent(Event.Type.ENTITY_DAMAGE, new PEntityListener(), Priority.Highest, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, new PPlayerListener(), Priority.Highest, this);
+        
         load();
         LOGGER.info("[Personas] Plugin enabled.");
     }
