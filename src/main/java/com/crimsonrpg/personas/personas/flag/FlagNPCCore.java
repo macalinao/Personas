@@ -66,7 +66,7 @@ public class FlagNPCCore extends GenericFlag<NPC> {
 
     public void reset() {
         location = null;
-        health = 0;
+        health = -1;
     }
 
     public int getHealth() {

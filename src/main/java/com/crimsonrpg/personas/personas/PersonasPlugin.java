@@ -113,9 +113,15 @@ public class PersonasPlugin extends JavaPlugin {
 
         List<NPC> npcList = Personas.getNPCManager().getList();
         for (NPC npc : npcList) {
+            LivingEntity handle = npc.getBukkitHandle();
+            
+            if (handle != null) {
             npc.getFlag(FlagNPCCore.class)
-                    .setLocation(npc.getBukkitHandle().getLocation())
-                    .setHealth(npc.getBukkitHandle().getHealth());
+                    .setLocation(handle.getLocation())
+                    .setHealth(handle.getHealth());
+            } else {
+                npc.getFlag(FlagNPCCore.class).reset();
+            }
             if (npc instanceof HumanNPC) {
                 HumanNPC human = (HumanNPC) npc;
                 //TODO: save inventory
