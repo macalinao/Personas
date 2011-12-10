@@ -11,10 +11,10 @@ import org.bukkit.entity.LivingEntity;
 
 import com.crimsonrpg.flaggables.api.Flag;
 import com.crimsonrpg.flaggables.api.GenericFlaggableManager;
+import com.crimsonrpg.personas.personas.flag.FlagNPCName;
+import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
-import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCName;
-import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.HashMap;
 import java.util.Map;

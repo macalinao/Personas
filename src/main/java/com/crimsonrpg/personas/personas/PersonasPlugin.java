@@ -7,6 +7,8 @@ package com.crimsonrpg.personas.personas;
 import com.crimsonrpg.personas.personasapi.persona.GenericPersona;
 import com.crimsonrpg.flaggables.api.FlaggableLoader;
 import com.crimsonrpg.flaggables.api.Flaggables;
+import com.crimsonrpg.personas.personas.flag.FlagNPCName;
+import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -19,8 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.crimsonrpg.personas.personasapi.Personas;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
-import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCName;
-import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCPersona;
 
 /**
  * The main Persons plugin.

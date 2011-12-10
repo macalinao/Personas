@@ -11,9 +11,10 @@ import org.bukkit.entity.HumanEntity;
 import org.martin.bukkit.npclib.NPCEntity;
 
 import com.crimsonrpg.flaggables.api.GenericFlaggable;
+import com.crimsonrpg.personas.personas.flag.FlagNPCName;
+import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personasapi.Personas;
 import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
-import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCPersona;
 
 /**
  * Represents a simple NPC.
@@ -21,7 +22,6 @@ import com.crimsonrpg.personas.personasapi.npc.flag.FlagNPCPersona;
 public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
 
     private NPCEntity handle;
-
     private HumanEntity bukkitHandle;
 
     SimpleHumanNPC(String id) {
@@ -34,6 +34,19 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
 
     public NPC<HumanEntity> setPersona(Persona persona) {
         getFlag(FlagNPCPersona.class).setPersona(persona);
+        return this;
+    }
+
+    public String getName() {
+        return getName(false);
+    }
+
+    public String getName(boolean compatible) {
+        return (compatible) ? getFlag(FlagNPCName.class).getCompatibleName() : getFlag(FlagNPCName.class).getName();
+    }
+
+    public NPC<HumanEntity> setName(String name) {
+        getFlag(FlagNPCName.class).setName(name);
         return this;
     }
 
@@ -62,5 +75,4 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
         this.handle = handle;
         this.bukkitHandle = (HumanEntity) handle.getBukkitEntity();
     }
-
 }
