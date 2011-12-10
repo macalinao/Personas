@@ -59,9 +59,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         }
 
         NPC theNpc = create(id);
-        theNpc.addFlags(flags);
-        theNpc.getFlag(FlagNPCName.class).setName(name);
-        theNpc.getFlag(FlagNPCPersona.class).setPersona(persona);
+        theNpc.setName(name).setPersona(persona).addFlags(flags);
 
 //        String title = theNpc.getName() + "\n"
 //                + ChatColor.AQUA + "<" + theNpc.getType().name() + ">";
@@ -75,7 +73,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
     @Override
     public NPC destroy(String id) {
-        handle.despawnById(id);
+        despawnNPC(id);
         return super.destroy(id);
     }
 
