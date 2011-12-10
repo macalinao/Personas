@@ -1,11 +1,5 @@
 package com.crimsonrpg.personas.personas.flag;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import com.crimsonrpg.flaggables.api.FlagId;
 import com.crimsonrpg.flaggables.api.GenericFlag;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
@@ -13,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.crimsonrpg.personas.personasapi.persona.Persona;
 import org.bukkit.Bukkit;
 
 /**
@@ -23,9 +16,7 @@ import org.bukkit.Bukkit;
 public class FlagNPCCore extends GenericFlag<NPC> {
 
     private Location location;
-
     private int health;
-
     private PlayerInventory inventory;
 
     public void load(ConfigurationSection cs) {
@@ -60,23 +51,26 @@ public class FlagNPCCore extends GenericFlag<NPC> {
         return health;
     }
 
-    protected void setHealth(int health) {
+    public FlagNPCCore setHealth(int health) {
         this.health = health;
+        return this;
     }
 
     public PlayerInventory getInventory() {
         return inventory;
     }
 
-    protected void setInventory(PlayerInventory inventory) {
+    public FlagNPCCore setInventory(PlayerInventory inventory) {
         this.inventory = inventory;
+        return this;
     }
 
     public Location getLocation() {
         return location;
     }
 
-    protected void setLocation(Location location) {
+    public FlagNPCCore setLocation(Location location) {
         this.location = location;
+        return this;
     }
 }

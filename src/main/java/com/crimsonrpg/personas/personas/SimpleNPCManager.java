@@ -13,8 +13,6 @@ import org.bukkit.entity.LivingEntity;
 
 import com.crimsonrpg.flaggables.api.Flag;
 import com.crimsonrpg.flaggables.api.GenericFlaggableManager;
-import com.crimsonrpg.personas.personas.PersonasEventFactory;
-import com.crimsonrpg.personas.personas.flag.FlagNPCName;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCCreateEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCDespawnEvent;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
@@ -28,6 +26,7 @@ import org.martin.bukkit.npclib.NPCEntity;
  * The default NPC manager implementation.
  */
 public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NPCManager {
+
     private Map<LivingEntity, NPC> bukkitMappings = new HashMap<LivingEntity, NPC>();
     private org.martin.bukkit.npclib.NPCManager handle;
 
@@ -64,11 +63,11 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
         NPC npc = create(id);
         npc.setName(name).setPersona(persona).addFlags(flags);
-        
+
         //Call the event
         NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
         //TODO: make this not cancellable
-        
+
         //TODO: spout support?
         //SpoutManager.getAppearanceManager().setGlobalTitle((LivingEntity) theNpc.getHandle().getBukkitEntity(), title);
 
@@ -88,7 +87,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         if (event.isCancelled()) {
             return null;
         }
-        
+
         npc.getPersona().onNPCDestroy(event);
         despawnNPC(npc);
         return super.destroy(npc.getId());
@@ -104,7 +103,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         if (event.isCancelled()) {
             return;
         }
-        
+
         npc.getPersona().onNPCSpawn(event);
         NPCEntity handel = handle.spawnNPC(npc.getName(true), event.getLocation(), npc.getId());
         ((SimpleHumanNPC) npc).setHandle(handel); //As in the composer
@@ -121,7 +120,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         if (event.isCancelled()) {
             return;
         }
-        
+
         npc.getPersona().onNPCDespawn(event);
         handle.despawnById(npc.getId());
     }
@@ -129,5 +128,4 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     public NPC fromBukkitEntity(LivingEntity le) {
         return bukkitMappings.get(le);
     }
-
 }
