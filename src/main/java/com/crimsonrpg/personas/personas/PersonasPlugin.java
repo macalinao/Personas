@@ -11,6 +11,7 @@ import com.crimsonrpg.personas.personas.flag.FlagNPCName;
 import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personas.listener.PEntityListener;
 import com.crimsonrpg.personas.personas.listener.PPlayerListener;
+import com.crimsonrpg.personas.personas.listener.PWorldListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -62,8 +63,8 @@ public class PersonasPlugin extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvent(Event.Type.ENTITY_DAMAGE, new PEntityListener(), Priority.Highest, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, new PPlayerListener(), Priority.Highest, this);
+        pm.registerEvent(Event.Type.CHUNK_LOAD, new PWorldListener(this), Priority.Monitor, this);
 
-        load();
         LOGGER.info("[Personas] Plugin enabled.");
     }
 
@@ -84,9 +85,9 @@ public class PersonasPlugin extends JavaPlugin {
         for (NPC npc : Personas.getNPCManager().getList()) {
             FlagNPCCore flag = npc.getFlag(FlagNPCCore.class);
             LivingEntity handle = npc.getBukkitHandle();
-            
+
             handle.setHealth(flag.getHealth());
-            
+
             if (flag.getLocation() != null) {
                 Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
             }
@@ -114,11 +115,9 @@ public class PersonasPlugin extends JavaPlugin {
         List<NPC> npcList = Personas.getNPCManager().getList();
         for (NPC npc : npcList) {
             LivingEntity handle = npc.getBukkitHandle();
-            
+
             if (handle != null) {
-            npc.getFlag(FlagNPCCore.class)
-                    .setLocation(handle.getLocation())
-                    .setHealth(handle.getHealth());
+                npc.getFlag(FlagNPCCore.class).setLocation(handle.getLocation()).setHealth(handle.getHealth());
             } else {
                 npc.getFlag(FlagNPCCore.class).reset();
             }

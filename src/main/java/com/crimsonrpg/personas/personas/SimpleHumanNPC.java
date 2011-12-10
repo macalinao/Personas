@@ -33,7 +33,7 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
     }
 
     public NPC<Player> setPersona(String persona) {
-        getFlag(FlagNPCPersona.class).setPersona(Personas.getPersonaManager().getPersona(persona));
+        getFlag(FlagNPCPersona.class).setPersonaName(persona);
         return this;
     }
 

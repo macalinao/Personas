@@ -4,8 +4,6 @@ package com.crimsonrpg.personas.personas.flag;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.crimsonrpg.flaggables.api.FlagId;
@@ -15,35 +13,41 @@ import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
 
 /**
- *
- * @author simplyianm
+ * Contains the name of the persona.
  */
 @FlagId("npc-persona")
 public class FlagNPCPersona extends GenericFlag<NPC> {
 
-    private Persona persona;
+    private String personaName;
 
     @Override
     public void load(ConfigurationSection section) {
-        persona = Personas.getPersonaManager().getPersona(section.getString("name"));
+        personaName = section.getString("name");
     }
 
     @Override
     public void save(ConfigurationSection section) {
-        section.set("name", persona.getName());
+        section.set("name", personaName);
     }
 
     @Override
     public void reset() {
-        persona = Personas.getPersonaManager().getPersona("default");
+        personaName = "null";
     }
 
     public Persona getPersona() {
+        Persona persona = Personas.getPersonaManager().getPersona(personaName);
+        if (persona == null) {
+            return Personas.getPersonaManager().getPersona("null");
+        }
         return persona;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public String getPersonaName() {
+        return personaName;
     }
 
+    public void setPersonaName(String persona) {
+        this.personaName = persona;
+    }
 }
