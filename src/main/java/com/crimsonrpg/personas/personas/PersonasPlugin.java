@@ -52,7 +52,7 @@ public class PersonasPlugin extends JavaPlugin {
     public void onEnable() {
         NPCManager npcManager = Personas.getNPCManager();
         ((SimpleNPCManager) npcManager).load(this);
-        Personas.getPersonaManager().registerPersona(new GenericPersona());
+        Personas.getPersonaManager().registerPersona(new GenericPersona("null"));
 
         Flaggables.getFlagManager().registerFlags(
                 FlagNPCName.class,

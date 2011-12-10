@@ -63,7 +63,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         }
 
         NPC npc = create(id);
-        npc.setName(name).setPersona((persona == null ? new GenericPersona() : persona)).addFlags(flags);
+        npc.setName(name).setPersona((persona == null ? new GenericPersona("null") : persona)).addFlags(flags);
 
         //Call the event
         NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
