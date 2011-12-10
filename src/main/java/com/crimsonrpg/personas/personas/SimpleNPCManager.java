@@ -4,22 +4,21 @@
  */
 package com.crimsonrpg.personas.personas;
 
+import com.crimsonrpg.flaggables.api.Flag;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCDestroyEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCSpawnEvent;
-import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
-import com.crimsonrpg.flaggables.api.Flag;
+import com.crimsonrpg.flaggables.api.FlaggableLoader;
 import com.crimsonrpg.flaggables.api.GenericFlaggableManager;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCCreateEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCDespawnEvent;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
-import com.crimsonrpg.personas.personasapi.persona.GenericPersona;
-import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.martin.bukkit.npclib.NPCEntity;
 
@@ -32,33 +31,39 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     private org.martin.bukkit.npclib.NPCManager handle;
 
     SimpleNPCManager() {
+        super(new FlaggableLoader<NPC>() {
+
+            public NPC create(String id, List<Flag> flags) {
+                //TODO: load npcs other than humans
+                return new SimpleHumanNPC(id);
+            }
+        });
     }
 
     void load(PersonasPlugin plugin) {
         handle = new org.martin.bukkit.npclib.NPCManager(plugin);
     }
 
-    public NPC create(String id) {
-        return new SimpleHumanNPC(id);
+    public NPC createNPC(String name) {
+        return createNPC(name, "null");
     }
 
-    public NPC createNPC(String name, List<Flag> flags, Persona persona) {
-        persona = (persona == null ? new GenericPersona("null") : persona);
-        
+    public NPC createNPC(String name, String persona) {
+
         //Create an ID
-        StringBuilder idBuilder = new StringBuilder();
-        idBuilder.append(name).append('-').append(persona.getName());
+        StringBuilder idBuilder = new StringBuilder(persona);
+        idBuilder.append("_").append(name);
 
         //Append a different number to the string if the id is taken
         for (int i = 0; idExists(idBuilder.toString()); i++) {
-            idBuilder = (new StringBuilder()).append(idBuilder.toString()).append(i);
+            idBuilder = (new StringBuilder()).append("_").append(idBuilder.toString()).append(i);
         }
 
         //Spawn it
-        return createNPC(idBuilder.toString(), name, flags, persona);
+        return createNPC(idBuilder.toString(), name, persona);
     }
 
-    public NPC createNPC(String id, String name, List<Flag> flags, Persona persona) {
+    public NPC createNPC(String id, String name, String persona) {
         if (idExists(id)) {
             PersonasPlugin.LOGGER.warning("[Personas] An NPC with the id '" + id + "' already exists; returning the existing NPC.");
             return get(id);
@@ -66,17 +71,13 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
         NPC npc = create(id);
         npc.setName(name);
-        
+
         if (persona == null) {
-            npc.setPersona(new GenericPersona("null"));
+            npc.setPersona("null");
         } else {
             npc.setPersona(persona);
         }
-        
-        if (flags != null) {
-            npc.addFlags(flags);
-        }
-        
+
         //Call the event
         NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
         //TODO: make this not cancellable

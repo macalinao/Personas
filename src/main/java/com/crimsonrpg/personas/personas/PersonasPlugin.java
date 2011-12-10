@@ -5,7 +5,6 @@
 package com.crimsonrpg.personas.personas;
 
 import com.crimsonrpg.personas.personasapi.persona.GenericPersona;
-import com.crimsonrpg.flaggables.api.FlaggableLoader;
 import com.crimsonrpg.flaggables.api.Flaggables;
 import com.crimsonrpg.personas.personas.flag.FlagNPCCore;
 import com.crimsonrpg.personas.personas.flag.FlagNPCName;
@@ -26,7 +25,6 @@ import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginManager;
@@ -55,6 +53,7 @@ public class PersonasPlugin extends JavaPlugin {
         Personas.getPersonaManager().registerPersona(new GenericPersona("null"));
 
         Flaggables.getFlagManager().registerFlags(
+                FlagNPCCore.class,
                 FlagNPCName.class,
                 FlagNPCPersona.class);
 
@@ -62,7 +61,7 @@ public class PersonasPlugin extends JavaPlugin {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvent(Event.Type.ENTITY_DAMAGE, new PEntityListener(), Priority.Highest, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, new PPlayerListener(), Priority.Highest, this);
-        
+
         load();
         LOGGER.info("[Personas] Plugin enabled.");
     }
@@ -79,27 +78,20 @@ public class PersonasPlugin extends JavaPlugin {
         }
 
         FileConfiguration npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
-        List<NPC> npcList = Flaggables.getFlagManager().readFlaggables(npcsConfig, new FlaggableLoader<NPC>() {
+        Personas.getNPCManager().load(npcsConfig);
 
-            public NPC create(String id) {
-                return new SimpleHumanNPC(id);
-            }
-
-        });
-        
-        for (NPC npc : npcList) {
+        for (NPC npc : Personas.getNPCManager().getList()) {
             FlagNPCCore flag = npc.getFlag(FlagNPCCore.class);
-                npc.getBukkitHandle().setHealth(flag.getHealth());
-                if (flag.getLocation() != null) {
-                    Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
-                }
+            npc.getBukkitHandle().setHealth(flag.getHealth());
+            if (flag.getLocation() != null) {
+                Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
+            }
             if (npc instanceof HumanNPC) {
                 HumanNPC human = (HumanNPC) npc;
                 //TODO: inventory loader
             }
         }
 
-        Personas.getNPCManager().load(npcList);
     }
 
     public void save() {
@@ -114,19 +106,16 @@ public class PersonasPlugin extends JavaPlugin {
         }
 
         FileConfiguration npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
-        
+
         List<NPC> npcList = Personas.getNPCManager().getList();
         for (NPC npc : npcList) {
-            npc.getFlag(FlagNPCCore.class)
-                    .setLocation(npc.getBukkitHandle().getLocation())
-                    .setHealth(npc.getBukkitHandle().getHealth());
+            npc.getFlag(FlagNPCCore.class).setLocation(npc.getBukkitHandle().getLocation()).setHealth(npc.getBukkitHandle().getHealth());
             if (npc instanceof HumanNPC) {
                 HumanNPC human = (HumanNPC) npc;
                 //TODO: save inventory
             }
         }
-        
-        Flaggables.getFlagManager().writeFlaggables(Personas.getNPCManager().getList(), npcsConfig);
-    }
 
+        Personas.getNPCManager().save(npcsConfig);
+    }
 }
