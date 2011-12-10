@@ -62,18 +62,18 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
             return get(id);
         }
 
-        NPC theNpc = create(id);
-        theNpc.setName(name).setPersona(persona).addFlags(flags);
-
+        NPC npc = create(id);
+        npc.setName(name).setPersona(persona).addFlags(flags);
+        
         //Call the event
-        PersonasEventFactory.callNPCCreateEvent(theNpc);
+        NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
         //TODO: make this not cancellable
         
         //TODO: spout support?
         //SpoutManager.getAppearanceManager().setGlobalTitle((LivingEntity) theNpc.getHandle().getBukkitEntity(), title);
 
-
-        return theNpc;
+        npc.getPersona().onNPCCreate(event);
+        return npc;
     }
 
     @Override
@@ -89,6 +89,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
             return null;
         }
         
+        npc.getPersona().onNPCDestroy(event);
         despawnNPC(npc);
         return super.destroy(npc.getId());
     }
@@ -104,6 +105,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
             return;
         }
         
+        npc.getPersona().onNPCSpawn(event);
         NPCEntity handel = handle.spawnNPC(npc.getName(true), event.getLocation(), npc.getId());
         ((SimpleHumanNPC) npc).setHandle(handel); //As in the composer
         bukkitMappings.put((LivingEntity) handel.getBukkitEntity(), npc);
@@ -120,6 +122,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
             return;
         }
         
+        npc.getPersona().onNPCDespawn(event);
         handle.despawnById(npc.getId());
     }
 
