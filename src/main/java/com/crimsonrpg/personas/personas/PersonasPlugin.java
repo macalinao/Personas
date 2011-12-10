@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.LivingEntity;
@@ -27,6 +29,7 @@ import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginManager;
@@ -66,6 +69,39 @@ public class PersonasPlugin extends JavaPlugin {
         pm.registerEvent(Event.Type.CHUNK_LOAD, new PWorldListener(this), Priority.Monitor, this);
 
         LOGGER.info("[Personas] Plugin enabled.");
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length < 1) {
+            sender.sendMessage("This server is sporting " + this.getDescription().getFullName() + " "
+                    + getDescription().getVersion() + " by " + getDescription().getAuthors() + ".");
+            return true;
+        }
+
+        String function = args[0];
+
+        if (function.equals("reload")) {
+
+            if (!sender.hasPermission("personas.load")) {
+                sender.sendMessage(ChatColor.DARK_RED + "You're not allowed to use this command.");
+                return false;
+            }
+
+            load();
+
+        } else if (function.equals("save")) {
+
+            if (!sender.hasPermission("personas.load")) {
+                sender.sendMessage(ChatColor.DARK_RED + "You're not allowed to use this command.");
+                return false;
+            }
+
+            save();
+
+        }
+
+        return true;
     }
 
     public void load() {
