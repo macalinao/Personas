@@ -34,7 +34,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     SimpleNPCManager() {
     }
 
-    protected void load(PersonasPlugin plugin) {
+    void load(PersonasPlugin plugin) {
         handle = new org.martin.bukkit.npclib.NPCManager(plugin);
     }
 
