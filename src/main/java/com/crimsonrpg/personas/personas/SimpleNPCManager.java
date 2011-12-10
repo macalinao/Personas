@@ -43,8 +43,6 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     }
 
     public NPC createNPC(String name, List<Flag> flags, Persona persona) {
-        persona = (persona == null ? new GenericPersona("null") : persona);
-        
         //Create an ID
         StringBuilder idBuilder = new StringBuilder();
         idBuilder.append(name).append('-').append(persona.getName());
@@ -65,8 +63,18 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         }
 
         NPC npc = create(id);
-        npc.setName(name).setPersona((persona == null ? new GenericPersona("null") : persona)).addFlags(flags);
-
+        npc.setName(name);
+        
+        if (persona == null) {
+            npc.setPersona(new GenericPersona("null"));
+        } else {
+            npc.setPersona(persona);
+        }
+        
+        if (flags != null) {
+            npc.addFlags(flags);
+        }
+        
         //Call the event
         NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
         //TODO: make this not cancellable
