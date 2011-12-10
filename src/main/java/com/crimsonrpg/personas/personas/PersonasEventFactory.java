@@ -13,6 +13,7 @@ import com.crimsonrpg.personas.personasapi.event.npc.NPCRightClickEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCSpawnEvent;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
@@ -29,7 +30,7 @@ public class PersonasEventFactory {
     }
     
     public static NPCDespawnEvent callNPCDespawnEvent(NPC npc) {
-        return callEvent(new NPCDespawnEvent(npc, npc.getBukkitHandle().getLocation()));
+        return callEvent(new NPCDespawnEvent(npc));
     }
     
     public static NPCDestroyEvent callNPCDestroyEvent(NPC npc) {
@@ -44,7 +45,7 @@ public class PersonasEventFactory {
         return callEvent(new NPCRightClickEvent(npc, player));
     }
     
-    public static NPCSpawnEvent callNPCSpawnEvent(NPC npc) {
-        return callEvent(new NPCSpawnEvent(npc, npc.getBukkitHandle().getLocation()));
+    public static NPCSpawnEvent callNPCSpawnEvent(NPC npc, Location location) {
+        return callEvent(new NPCSpawnEvent(npc, location));
     }
 }

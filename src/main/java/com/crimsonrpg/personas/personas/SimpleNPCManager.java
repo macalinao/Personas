@@ -4,6 +4,8 @@
  */
 package com.crimsonrpg.personas.personas;
 
+import com.crimsonrpg.personas.personasapi.event.npc.NPCDestroyEvent;
+import com.crimsonrpg.personas.personasapi.event.npc.NPCSpawnEvent;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -11,8 +13,10 @@ import org.bukkit.entity.LivingEntity;
 
 import com.crimsonrpg.flaggables.api.Flag;
 import com.crimsonrpg.flaggables.api.GenericFlaggableManager;
+import com.crimsonrpg.personas.personas.PersonasEventFactory;
 import com.crimsonrpg.personas.personas.flag.FlagNPCName;
-import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
+import com.crimsonrpg.personas.personasapi.event.npc.NPCCreateEvent;
+import com.crimsonrpg.personas.personasapi.event.npc.NPCDespawnEvent;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
@@ -61,9 +65,10 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         NPC theNpc = create(id);
         theNpc.setName(name).setPersona(persona).addFlags(flags);
 
-//        String title = theNpc.getName() + "\n"
-//                + ChatColor.AQUA + "<" + theNpc.getType().name() + ">";
-
+        //Call the event
+        PersonasEventFactory.callNPCCreateEvent(theNpc);
+        //TODO: make this not cancellable
+        
         //TODO: spout support?
         //SpoutManager.getAppearanceManager().setGlobalTitle((LivingEntity) theNpc.getHandle().getBukkitEntity(), title);
 
@@ -73,13 +78,19 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
     @Override
     public NPC destroy(String id) {
-        despawnNPC(id);
-        return super.destroy(id);
+        return destroy(get(id));
     }
 
     @Override
     public NPC destroy(NPC npc) {
-        return destroy(npc.getId());
+        //Call the event
+        NPCDestroyEvent event = PersonasEventFactory.callNPCDestroyEvent(npc);
+        if (event.isCancelled()) {
+            return null;
+        }
+        
+        despawnNPC(npc);
+        return super.destroy(npc.getId());
     }
 
     public void spawnNPC(String id, Location location) {
@@ -87,16 +98,28 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     }
 
     public void spawnNPC(NPC npc, Location location) {
-        NPCEntity handel = handle.spawnNPC(npc.getFlag(FlagNPCName.class).getCompatibleName(), location, npc.getId());
+        //Call the event
+        NPCSpawnEvent event = PersonasEventFactory.callNPCSpawnEvent(npc, location);
+        if (event.isCancelled()) {
+            return;
+        }
+        
+        NPCEntity handel = handle.spawnNPC(npc.getName(true), event.getLocation(), npc.getId());
         ((SimpleHumanNPC) npc).setHandle(handel); //As in the composer
         bukkitMappings.put((LivingEntity) handel.getBukkitEntity(), npc);
     }
 
     public void despawnNPC(String id) {
-        handle.despawnById(id);
+        despawnNPC(get(id));
     }
 
     public void despawnNPC(NPC npc) {
+        //Call the event
+        NPCDespawnEvent event = PersonasEventFactory.callNPCDespawnEvent(npc);
+        if (event.isCancelled()) {
+            return;
+        }
+        
         handle.despawnById(npc.getId());
     }
 
