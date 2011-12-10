@@ -43,6 +43,8 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
     }
 
     public NPC createNPC(String name, List<Flag> flags, Persona persona) {
+        persona = (persona == null ? new GenericPersona("null") : persona);
+        
         //Create an ID
         StringBuilder idBuilder = new StringBuilder();
         idBuilder.append(name).append('-').append(persona.getName());
