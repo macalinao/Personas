@@ -4,7 +4,7 @@
  */
 package com.crimsonrpg.personas.personas;
 
-import com.crimsonrpg.personas.personasapi.persona.DefaultPersona;
+import com.crimsonrpg.personas.personasapi.persona.GenericPersona;
 import com.crimsonrpg.flaggables.api.FlaggableLoader;
 import com.crimsonrpg.flaggables.api.Flaggables;
 import java.io.File;
@@ -42,7 +42,7 @@ public class PersonasPlugin extends JavaPlugin {
     public void onEnable() {
         NPCManager npcManager = Personas.getNPCManager();
         ((SimpleNPCManager) npcManager).load(this);
-        Personas.getPersonaManager().registerPersona(new DefaultPersona());
+        Personas.getPersonaManager().registerPersona(new GenericPersona());
 
         Flaggables.getFlagManager().registerFlags(
                 FlagNPCName.class,
