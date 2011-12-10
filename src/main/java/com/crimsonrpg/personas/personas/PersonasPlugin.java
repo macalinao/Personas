@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.crimsonrpg.personas.personasapi.Personas;
@@ -82,7 +83,10 @@ public class PersonasPlugin extends JavaPlugin {
 
         for (NPC npc : Personas.getNPCManager().getList()) {
             FlagNPCCore flag = npc.getFlag(FlagNPCCore.class);
-            npc.getBukkitHandle().setHealth(flag.getHealth());
+            LivingEntity handle = npc.getBukkitHandle();
+            
+            handle.setHealth(flag.getHealth());
+            
             if (flag.getLocation() != null) {
                 Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
             }
@@ -109,7 +113,9 @@ public class PersonasPlugin extends JavaPlugin {
 
         List<NPC> npcList = Personas.getNPCManager().getList();
         for (NPC npc : npcList) {
-            npc.getFlag(FlagNPCCore.class).setLocation(npc.getBukkitHandle().getLocation()).setHealth(npc.getBukkitHandle().getHealth());
+            npc.getFlag(FlagNPCCore.class)
+                    .setLocation(npc.getBukkitHandle().getLocation())
+                    .setHealth(npc.getBukkitHandle().getHealth());
             if (npc instanceof HumanNPC) {
                 HumanNPC human = (HumanNPC) npc;
                 //TODO: save inventory
