@@ -83,7 +83,7 @@ public class PersonasPlugin extends JavaPlugin {
 
         if (function.equals("reload")) {
 
-            if (!sender.hasPermission("personas.load")) {
+            if (!sender.hasPermission("personas.reload")) {
                 sender.sendMessage(ChatColor.DARK_RED + "You're not allowed to use this command.");
                 return false;
             }
@@ -92,7 +92,7 @@ public class PersonasPlugin extends JavaPlugin {
 
         } else if (function.equals("save")) {
 
-            if (!sender.hasPermission("personas.load")) {
+            if (!sender.hasPermission("personas.save")) {
                 sender.sendMessage(ChatColor.DARK_RED + "You're not allowed to use this command.");
                 return false;
             }

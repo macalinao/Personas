@@ -10,3 +10,17 @@ commands:
   personas:
     description: Personas base command
     usage: /personas
+    
+permissions:
+  personas.*:
+    description: Personas permissions
+    default: op
+    children:
+      personas.reload: true
+      personas.save: true
+      
+  personas.reload:
+    description: Enables a player to reload personas.
+    
+  personas.save:
+    description: Enables a player to save personas.
