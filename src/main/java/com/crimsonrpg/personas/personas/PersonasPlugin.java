@@ -22,6 +22,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.crimsonrpg.personas.personasapi.Personas;
+import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
 import org.bukkit.Bukkit;
@@ -85,6 +86,18 @@ public class PersonasPlugin extends JavaPlugin {
             }
 
         });
+        
+        for (NPC npc : npcList) {
+            FlagNPCCore flag = npc.getFlag(FlagNPCCore.class);
+                npc.getBukkitHandle().setHealth(flag.getHealth());
+                if (flag.getLocation() != null) {
+                    Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
+                }
+            if (npc instanceof HumanNPC) {
+                HumanNPC human = (HumanNPC) npc;
+                //TODO: inventory loader
+            }
+        }
 
         Personas.getNPCManager().load(npcList);
     }
@@ -106,8 +119,11 @@ public class PersonasPlugin extends JavaPlugin {
         for (NPC npc : npcList) {
             npc.getFlag(FlagNPCCore.class)
                     .setLocation(npc.getBukkitHandle().getLocation())
-                    .setHealth(npc.getBukkitHandle().getHealth())
-                    .setInventory(((Player) npc.getBukkitHandle()).getInventory());
+                    .setHealth(npc.getBukkitHandle().getHealth());
+            if (npc instanceof HumanNPC) {
+                HumanNPC human = (HumanNPC) npc;
+                //TODO: save inventory
+            }
         }
         
         Flaggables.getFlagManager().writeFlaggables(Personas.getNPCManager().getList(), npcsConfig);

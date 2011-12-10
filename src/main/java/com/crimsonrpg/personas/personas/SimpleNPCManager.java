@@ -17,6 +17,7 @@ import com.crimsonrpg.personas.personasapi.event.npc.NPCCreateEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCDespawnEvent;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.npc.NPCManager;
+import com.crimsonrpg.personas.personasapi.persona.GenericPersona;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         }
 
         NPC npc = create(id);
-        npc.setName(name).setPersona(persona).addFlags(flags);
+        npc.setName(name).setPersona((persona == null ? new GenericPersona() : persona)).addFlags(flags);
 
         //Call the event
         NPCCreateEvent event = PersonasEventFactory.callNPCCreateEvent(npc);
