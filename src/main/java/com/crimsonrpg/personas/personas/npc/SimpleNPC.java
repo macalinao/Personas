@@ -2,28 +2,28 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.crimsonrpg.personas.personas;
-
-import com.crimsonrpg.personas.personasapi.npc.NPC;
-import com.crimsonrpg.personas.personasapi.persona.Persona;
-import org.bukkit.Location;
-import org.martin.bukkit.npclib.NPCEntity;
+package com.crimsonrpg.personas.personas.npc;
 
 import com.crimsonrpg.flaggables.api.GenericFlaggable;
 import com.crimsonrpg.personas.personas.flag.FlagNPCName;
 import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personasapi.Personas;
-import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
+import com.crimsonrpg.personas.personasapi.npc.NPC;
+import com.crimsonrpg.personas.personasapi.persona.Persona;
+import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.martin.bukkit.npclib.NPCEntity;
 
 /**
- * Represents a simple NPC.
+ *
+ * @author simplyianm
  */
-public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
+public abstract class SimpleNPC<T extends LivingEntity> extends GenericFlaggable implements NPC<T> {
 
     private NPCEntity handle;
 
-    SimpleHumanNPC(String id) {
+    public SimpleNPC(String id) {
         super(id);
     }
 
@@ -31,7 +31,7 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
         return getFlag(FlagNPCPersona.class).getPersona();
     }
 
-    public NPC<Player> setPersona(String persona) {
+    public NPC<T> setPersona(String persona) {
         getFlag(FlagNPCPersona.class).setPersonaName(persona);
         return this;
     }
@@ -44,8 +44,11 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
         return getFlag(FlagNPCName.class).getFullName();
     }
 
-    public NPC<Player> setName(String name) {
+    public NPC<T> setName(String name) {
         getFlag(FlagNPCName.class).setFullName(name);
+        if (handle != null) {
+            handle.setName(getName());
+        }
         return this;
     }
 
@@ -60,23 +63,4 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
     public void delete() {
         Personas.getNPCManager().destroy(this);
     }
-
-    public Player getBukkitHandle() {
-        return (Player) handle.getBukkitEntity();
-    }
-
-    /**
-     * Sets the NPC's handle.
-     * 
-     * @param handle The NPC handle.
-     */
-    void setHandle(NPCEntity handle) {
-        this.handle = handle;
-    }
-
-    @Override
-    public String toString() {
-        return "SimpleHumanNPC{" + "handle=" + handle + ",flags=" + getFlags() + '}';
-    }
-    
 }

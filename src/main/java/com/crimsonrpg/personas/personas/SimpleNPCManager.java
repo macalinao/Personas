@@ -4,6 +4,7 @@
  */
 package com.crimsonrpg.personas.personas;
 
+import com.crimsonrpg.personas.personas.npc.SimpleHumanNPC;
 import com.crimsonrpg.flaggables.api.Flag;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCDestroyEvent;
 import com.crimsonrpg.personas.personasapi.event.npc.NPCSpawnEvent;
