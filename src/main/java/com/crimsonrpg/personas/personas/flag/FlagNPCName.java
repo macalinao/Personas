@@ -1,14 +1,9 @@
 package com.crimsonrpg.personas.personas.flag;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import com.crimsonrpg.flaggables.api.FlagId;
 import com.crimsonrpg.flaggables.api.GenericFlag;
 import com.crimsonrpg.personas.personasapi.npc.NPC;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
@@ -16,32 +11,39 @@ import org.bukkit.configuration.ConfigurationSection;
  */
 @FlagId("npc-name")
 public class FlagNPCName extends GenericFlag<NPC> {
-    private String name;
-    
+
+    private String fullName;
+
     @Override
     public void load(ConfigurationSection section) {
-        name = section.getString("name");
+        fullName = section.getString("name");
     }
 
     @Override
     public void save(ConfigurationSection section) {
-        section.set("name", name);
+        section.set("name", fullName);
     }
 
     @Override
     public void reset() {
-        name = "Unnamed";
+        fullName = "Unnamed";
     }
 
     public String getName() {
-        return name;
+        String stripped = ChatColor.stripColor(fullName);
+        return (stripped.length() > 16) ? stripped.substring(0, 16) : stripped;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getFullName() {
+        return fullName;
     }
-    
-    public String getCompatibleName() {
-        return (name.length() > 16) ? name.substring(0, 16) : name;
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    @Override
+    public String toString() {
+        return "FlagNPCName{" + "name=" + fullName + '}';
     }
 }

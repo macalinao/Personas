@@ -37,15 +37,15 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
     }
 
     public String getName() {
-        return getName(false);
+        return getFlag(FlagNPCName.class).getName();
     }
 
-    public String getName(boolean compatible) {
-        return (compatible) ? getFlag(FlagNPCName.class).getCompatibleName() : getFlag(FlagNPCName.class).getName();
+    public String getFullName() {
+        return getFlag(FlagNPCName.class).getFullName();
     }
 
     public NPC<Player> setName(String name) {
-        getFlag(FlagNPCName.class).setName(name);
+        getFlag(FlagNPCName.class).setFullName(name);
         return this;
     }
 

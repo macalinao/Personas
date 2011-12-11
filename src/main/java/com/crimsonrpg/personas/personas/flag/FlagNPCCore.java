@@ -86,4 +86,9 @@ public class FlagNPCCore extends GenericFlag<NPC> {
         this.location = location;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "FlagNPCCore{" + "location=" + location + ", health=" + health + '}';
+    }
 }

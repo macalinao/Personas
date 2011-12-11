@@ -35,7 +35,12 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
             public NPC create(String id, List<Flag> flags) {
                 //TODO: load npcs other than humans
-                return new SimpleHumanNPC(id);
+                if (flags == null) {
+                    return new SimpleHumanNPC(id);
+                }
+                NPC npc = new SimpleHumanNPC(id);
+                npc.addFlags(flags);
+                return npc;
             }
         });
     }
@@ -119,7 +124,7 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
         }
 
         npc.getPersona().onNPCSpawn(event);
-        NPCEntity handel = handle.spawnNPC(npc.getName(true), event.getLocation(), npc.getId());
+        NPCEntity handel = handle.spawnNPC(npc.getName(), event.getLocation(), npc.getId());
         ((SimpleHumanNPC) npc).setHandle(handel); //As in the composer
         bukkitMappings.put((LivingEntity) handel.getBukkitEntity(), npc);
     }
