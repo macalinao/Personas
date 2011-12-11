@@ -53,13 +53,13 @@ public class PEntityListener extends EntityListener {
             return;
         }
         
+        //Do the stuff
+        npc.getPersona().onNPCLeftClick(ev);
+        
         //Check for damage
         if (!ev.isDamaging()) {
             event.setCancelled(true);
         }
-        
-        //Do the stuff
-        npc.getPersona().onNPCLeftClick(ev);
     }
     
 }
