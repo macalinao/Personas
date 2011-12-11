@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
 
     private NPCEntity handle;
-    private Player bukkitHandle;
 
     SimpleHumanNPC(String id) {
         super(id);
@@ -63,7 +62,7 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
     }
 
     public Player getBukkitHandle() {
-        return bukkitHandle;
+        return (Player) handle.getBukkitEntity();
     }
 
     /**
@@ -73,6 +72,11 @@ public final class SimpleHumanNPC extends GenericFlaggable implements HumanNPC {
      */
     void setHandle(NPCEntity handle) {
         this.handle = handle;
-        this.bukkitHandle = (Player) handle.getBukkitEntity();
     }
+
+    @Override
+    public String toString() {
+        return "SimpleHumanNPC{" + "handle=" + handle + ",flags=" + getFlags() + '}';
+    }
+    
 }

@@ -14,6 +14,7 @@ import com.crimsonrpg.personas.personas.listener.PPlayerListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.command.Command;
@@ -165,6 +166,11 @@ public class PersonasPlugin extends JavaPlugin {
         }
 
         Personas.getNPCManager().save(npcsConfig);
+        try {
+            npcsConfig.save("./plugins/Personas/npcs.yml");
+        } catch (IOException ex) {
+            LOGGER.severe("[Personas] Could not write the NPC file.");
+        }
     }
     
     private FileConfiguration getNPCsFile() {
