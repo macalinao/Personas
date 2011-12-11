@@ -105,17 +105,12 @@ public class PersonasPlugin extends JavaPlugin {
     }
 
     public void load() {
-        File npcsFile = new File("/plugins/Personas/npcs.yml");
-        npcsFile.mkdirs();
-
-        try {
-            npcsFile.createNewFile();
-        } catch (IOException ex) {
-            LOGGER.severe("[Personas] Could not create the NPCs file.");
+        FileConfiguration npcsConfig = getNPCsFile();
+        if (npcsConfig == null) {
+            LOGGER.severe("[Personas] The NPC file was unable to be loaded.");
             return;
         }
-
-        FileConfiguration npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
+        
         Personas.getNPCManager().load(npcsConfig);
 
         for (NPC npc : Personas.getNPCManager().getList()) {
@@ -143,18 +138,12 @@ public class PersonasPlugin extends JavaPlugin {
     }
 
     public void save() {
-        File npcsFile = new File("/plugins/Personas/npcs.yml");
-        npcsFile.mkdirs();
-
-        try {
-            npcsFile.createNewFile();
-        } catch (IOException ex) {
-            LOGGER.severe("[Personas] Could not create the NPCs file.");
+        FileConfiguration npcsConfig = getNPCsFile();
+        if (npcsConfig == null) {
+            LOGGER.severe("[Personas] The NPC file was unable to be loaded.");
             return;
         }
-
-        FileConfiguration npcsConfig = YamlConfiguration.loadConfiguration(npcsFile);
-
+        
         List<NPC> npcList = Personas.getNPCManager().getList();
         for (NPC npc : npcList) {
             LivingEntity handle = npc.getBukkitHandle();
@@ -171,5 +160,21 @@ public class PersonasPlugin extends JavaPlugin {
         }
 
         Personas.getNPCManager().save(npcsConfig);
+    }
+    
+    private FileConfiguration getNPCsFile() {
+        File pluginFolder = new File("./plugins/Personas/");
+        pluginFolder.mkdirs();
+
+        File npcsFile = new File(pluginFolder.getPath() + File.separator + "npcs.yml");
+        
+        try {
+            npcsFile.createNewFile();
+        } catch (IOException ex) {
+            LOGGER.severe("[Personas] Could not create the NPCs file.");
+            return null;
+        }
+
+        return YamlConfiguration.loadConfiguration(npcsFile);
     }
 }
