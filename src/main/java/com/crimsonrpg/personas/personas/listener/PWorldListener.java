@@ -23,6 +23,7 @@ public class PWorldListener extends WorldListener {
     public void onChunkLoad(ChunkLoadEvent event) {
         if (!loaded) {
             plugin.load();
+            loaded = true;
         }
     }
 }
