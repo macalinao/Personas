@@ -46,9 +46,4 @@ public class FlagNPCName extends GenericFlag<NPC> {
     public String toString() {
         return "FlagNPCName{" + "name=" + fullName + '}';
     }
-
-    @Override
-    public String toString() {
-        return "FlagNPCName{" + "name=" + name + '}';
-    }
 }
