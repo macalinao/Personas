@@ -35,7 +35,12 @@ public class SimpleNPCManager extends GenericFlaggableManager<NPC> implements NP
 
             public NPC create(String id, List<Flag> flags) {
                 //TODO: load npcs other than humans
-                return new SimpleHumanNPC(id);
+                if (flags == null) {
+                    return new SimpleHumanNPC(id);
+                }
+                NPC npc = new SimpleHumanNPC(id);
+                npc.addFlags(flags);
+                return npc;
             }
         });
     }

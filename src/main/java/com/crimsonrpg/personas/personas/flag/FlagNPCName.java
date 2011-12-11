@@ -44,4 +44,9 @@ public class FlagNPCName extends GenericFlag<NPC> {
     public String getCompatibleName() {
         return (name.length() > 16) ? name.substring(0, 16) : name;
     }
+
+    @Override
+    public String toString() {
+        return "FlagNPCName{" + "name=" + name + '}';
+    }
 }

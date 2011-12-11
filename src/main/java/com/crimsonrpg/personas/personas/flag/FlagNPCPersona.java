@@ -50,4 +50,9 @@ public class FlagNPCPersona extends GenericFlag<NPC> {
     public void setPersonaName(String persona) {
         this.personaName = persona;
     }
+
+    @Override
+    public String toString() {
+        return "FlagNPCPersona{" + "personaName=" + personaName + '}';
+    }
 }
