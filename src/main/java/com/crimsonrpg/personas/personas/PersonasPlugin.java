@@ -11,7 +11,6 @@ import com.crimsonrpg.personas.personas.flag.FlagNPCName;
 import com.crimsonrpg.personas.personas.flag.FlagNPCPersona;
 import com.crimsonrpg.personas.personas.listener.PEntityListener;
 import com.crimsonrpg.personas.personas.listener.PPlayerListener;
-import com.crimsonrpg.personas.personas.listener.PWorldListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -32,6 +31,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.PluginManager;
 
 /**
@@ -64,9 +64,10 @@ public class PersonasPlugin extends JavaPlugin {
 
         //Register events
         PluginManager pm = Bukkit.getPluginManager();
+        PlayerListener pl = new PPlayerListener(this);
         pm.registerEvent(Event.Type.ENTITY_DAMAGE, new PEntityListener(), Priority.Highest, this);
-        pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, new PPlayerListener(), Priority.Highest, this);
-        pm.registerEvent(Event.Type.CHUNK_LOAD, new PWorldListener(this), Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT_ENTITY, pl, Priority.Highest, this);
+        pm.registerEvent(Event.Type.PLAYER_MOVE, pl, Priority.Highest, this);
 
         LOGGER.info("[Personas] Plugin enabled.");
     }
@@ -105,6 +106,8 @@ public class PersonasPlugin extends JavaPlugin {
     }
 
     public void load() {
+        LOGGER.info("[Personas] Loading NPCs...");
+        
         FileConfiguration npcsConfig = getNPCsFile();
         if (npcsConfig == null) {
             LOGGER.severe("[Personas] The NPC file was unable to be loaded.");
@@ -138,6 +141,8 @@ public class PersonasPlugin extends JavaPlugin {
     }
 
     public void save() {
+        LOGGER.info("[Personas] Saving NPCs...");
+        
         FileConfiguration npcsConfig = getNPCsFile();
         if (npcsConfig == null) {
             LOGGER.severe("[Personas] The NPC file was unable to be loaded.");
