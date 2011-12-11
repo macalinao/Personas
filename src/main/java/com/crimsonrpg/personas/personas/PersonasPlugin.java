@@ -120,12 +120,19 @@ public class PersonasPlugin extends JavaPlugin {
 
         for (NPC npc : Personas.getNPCManager().getList()) {
             FlagNPCCore flag = npc.getFlag(FlagNPCCore.class);
+            
+            //Check if the npc is manifested
+            if (flag.getLocation() == null) {
+                return;
+            }
+            
+            Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
             LivingEntity handle = npc.getBukkitHandle();
-
-            handle.setHealth(flag.getHealth());
-
-            if (flag.getLocation() != null) {
-                Personas.getNPCManager().spawnNPC(npc, flag.getLocation());
+            
+            //Valid health amount
+            int health = flag.getHealth();
+            if (health >= 0 && health <= 20) {
+                handle.setHealth(health);
             }
             if (npc instanceof HumanNPC) {
                 HumanNPC human = (HumanNPC) npc;
