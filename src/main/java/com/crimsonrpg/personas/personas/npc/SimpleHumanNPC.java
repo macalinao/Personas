@@ -4,6 +4,7 @@
  */
 package com.crimsonrpg.personas.personas.npc;
 
+import com.crimsonrpg.personas.personasapi.npc.NPC;
 import org.martin.bukkit.npclib.NPCEntity;
 
 import com.crimsonrpg.personas.personasapi.npc.HumanNPC;
@@ -31,6 +32,14 @@ public class SimpleHumanNPC extends SimpleNPC<Player> implements HumanNPC {
      */
     public void setHandle(NPCEntity handle) {
         this.handle = handle;
+    }
+
+    @Override
+    public NPC<Player> setName(String name) {
+        if (handle != null) {
+            handle.setName(getName());
+        }
+        return super.setName(name);
     }
 
     @Override

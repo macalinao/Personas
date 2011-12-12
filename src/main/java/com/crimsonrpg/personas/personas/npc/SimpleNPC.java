@@ -12,16 +12,12 @@ import com.crimsonrpg.personas.personasapi.npc.NPC;
 import com.crimsonrpg.personas.personasapi.persona.Persona;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.martin.bukkit.npclib.NPCEntity;
 
 /**
  *
  * @author simplyianm
  */
 public abstract class SimpleNPC<T extends LivingEntity> extends GenericFlaggable implements NPC<T> {
-
-    private NPCEntity handle;
 
     public SimpleNPC(String id) {
         super(id);
@@ -46,9 +42,6 @@ public abstract class SimpleNPC<T extends LivingEntity> extends GenericFlaggable
 
     public NPC<T> setName(String name) {
         getFlag(FlagNPCName.class).setFullName(name);
-        if (handle != null) {
-            handle.setName(getName());
-        }
         return this;
     }
 
